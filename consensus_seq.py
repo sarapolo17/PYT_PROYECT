@@ -1,3 +1,8 @@
+###########################################
+############ CONSENSUS SEQUENCE ###########
+###########################################
+
+"""Creates a consensus sequence from an CLUSTALW format"""
 import sys
 from Bio import AlignIO
 from Bio.Align import AlignInfo
@@ -5,7 +10,7 @@ from Bio.Align import AlignInfo
 def get_consensus_seq(aln_file):
 
     """Creates a consensus sequence
-    from an input MSA file in CLUSTAL format.
+    from an input MSA file in CLUSTALW format.
     If the percentage of the most common residue type is
     greater than 70%, then we will add that
     residue type; otherwise an X will be added."""
