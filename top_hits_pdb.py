@@ -1,6 +1,8 @@
 ####################################
 ############ PDB CHAINS ############
 ####################################
+'''Functions for reading and processing the BLAST output against the PDB:
+getting identifiers and scores, downloading PDB files and splitting chains'''
 
 import os
 import re
