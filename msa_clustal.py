@@ -1,6 +1,8 @@
 #####################################
 ############ CLUSTAL MSA ############
 #####################################
+'''Contains the functions for creating, reading and assigning
+indices to CLUSTALO MSAs'''
 
 import sys
 import os
