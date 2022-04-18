@@ -1,3 +1,8 @@
+#########################################
+############## DATABASES #############
+#########################################
+
+""" Creates PDB and UniProt Databases """
 from urllib import request
 import os
 import sys
