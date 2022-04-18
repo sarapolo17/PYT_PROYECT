@@ -1,3 +1,8 @@
+################################
+############ SET UP ############
+################################
+
+""" Set up file with with information and needs to run the program""" 
 from setuptools import setup, find_packages, dist
 
 requirements = ['Bio==1.3.8', 'matplotlib==3.4.3','numpy==1.20.3', 'setuptools==58.0.4']
