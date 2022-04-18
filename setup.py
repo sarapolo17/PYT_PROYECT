@@ -1,12 +1,6 @@
-#########################################
-############## SET UP FILE ##############
-#########################################
-
-""" Set up file with information needed to run the program """
 from setuptools import setup, find_packages, dist
 
-with open('requires.txt') as f:
-    requirements = f.readlines()
+requirements = ['Bio==1.3.8', 'matplotlib==3.4.3','numpy==1.20.3', 'setuptools==58.0.4']
 
 setup(
     name='FlexiScore',
