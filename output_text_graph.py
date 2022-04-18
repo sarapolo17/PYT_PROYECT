@@ -1,7 +1,8 @@
 ###################################################
 ############## TEXT AND PLOT OUTPUT ###############
 ###################################################
-# Libraries
+'''Functions for creating text and graphical outputs'''
+
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.collections import LineCollection
