@@ -10,6 +10,7 @@ import gzip
 import shutil
 
 def database_pdb():
+    """ Create PDB database """
     sys.stderr.write("Creating PDB database...\n")
     os.system("mkdir PDB_FASTA")
     os.chdir("./PDB_FASTA")
@@ -24,6 +25,7 @@ def database_pdb():
 
 
 def database_uniprot():
+    """ Create UniProt database """
     sys.stderr.write("Creating UniProt database...\n")
     os.system("mkdir UniProt")
     os.chdir("./UniProt")
