@@ -1,6 +1,7 @@
 ########################################################
 ############ GET SEQ and B-FACTORS FROM PDB ############
 ########################################################
+'''Extracting information from PDB files and normalizing B-values'''
 
 import sys
 from Bio.PDB import PDBParser
