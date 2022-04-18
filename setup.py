@@ -1,3 +1,8 @@
+#########################################
+############## SET UP FILE ##############
+#########################################
+
+""" Set up file with information needed to run the program """
 from setuptools import setup, find_packages, dist
 
 with open('requires.txt') as f:
