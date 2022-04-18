@@ -1,3 +1,9 @@
+###########################################
+######## CALCULATE FLEXIBILITY ############
+###########################################
+
+"""B-values calculated for each residue"""
+
 def calculate_flex_pos(B_val_dict, pos_dict, score_dict):
 
     '''Function that takes a dictionary with normalized B-values, a dictionary 
