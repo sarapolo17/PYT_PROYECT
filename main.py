@@ -17,18 +17,18 @@ import output_text_graph
 ### Check input
 
 if ((input_sequence and not input_family) or (not input_sequence and input_family)): # xor, only one input
-
+    
     # correct input
 
     sys.stderr.write("Correct input. Processing...\n")
-
+    
     # remove directory if it already exists
 
     if os.path.isdir("flexibility"):
         os.system("rm -r flexibility")
 
     # create new directory for results
-
+    
     os.mkdir("flexibility")
 
     # move input to new directory
@@ -36,7 +36,7 @@ if ((input_sequence and not input_family) or (not input_sequence and input_famil
     if input_sequence:
         os.system("cp " + input_sequence + " ./flexibility")
 
-    else:
+    else: 
          os.system("cp " + input_family + " ./flexibility")
 
     os.chdir("./flexibility")
@@ -56,7 +56,7 @@ if input_family: # convert protein family to consensus sequence
     try:
         input_file.write(str(consensus_seq.get_consensus_seq(input_family)))
         input_file.close()
-        input_sequence = input_file.name
+        input_sequence = input_file.name  
 
     except:
         input_file.close()
@@ -65,8 +65,8 @@ if input_family: # convert protein family to consensus sequence
 ### PSI-BLAST
 ## Get PSSM
 
-psi_BLAST_PSSM.run_psiblast_homologues_PSSM(FASTA_seq = input_sequence,
-                                            input_iters = 5,
+psi_BLAST_PSSM.run_psiblast_homologues_PSSM(FASTA_seq = input_sequence, 
+                                            input_iters = 5, 
                                             database = "../UniProt/UniProt.db.fasta",
                                             in_pssm_filename = None,
                                             out_pssm_filename = "psiblast_uniprot_5.pssm",
@@ -75,8 +75,8 @@ psi_BLAST_PSSM.run_psiblast_homologues_PSSM(FASTA_seq = input_sequence,
 
 ## Search in PDB with PSSM
 
-psi_BLAST_PSSM.run_psiblast_homologues_PSSM(FASTA_seq = input_sequence,
-                                            input_iters = 1,
+psi_BLAST_PSSM.run_psiblast_homologues_PSSM(FASTA_seq = input_sequence, 
+                                            input_iters = 1, 
                                             database = "../PDB_FASTA/PDB_FASTA.db",
                                             in_pssm_filename = "./psiblast_uniprot_5.pssm",
                                             out_pssm_filename = "psiblast_pdb_1.pssm",
@@ -102,15 +102,27 @@ all_seq_Bnorm = {}
 for PDB_split_file in (os.listdir(os.getcwd() + "/PDB_downloads/split")):
     seq_B = normalized_b_values.get_seq_B_from_PDB(os.getcwd() + "/PDB_downloads/split/" + PDB_split_file)
 
-    # Create input for MSA: templates
-
-    hits_for_MSA_file.write (">" + PDB_split_file.split(".")[0] + "\n")
-    hits_for_MSA_file.write (seq_B["FASTA_seq"] + "\n")
-
     # Normalize and append to big dictionary
 
     seq_B_norm = normalized_b_values.normalized_b_values(seq_B)
     all_seq_Bnorm[PDB_split_file.split(".")[0]] = seq_B_norm
+
+# Eliminate PDB homologs that could not be normalized form dictionary
+
+for PDB_homolog, seq_B_norm in all_seq_Bnorm.copy().items():
+    for aa_Bnorm_tup in seq_B_norm["B_val_list"]:
+
+        if aa_Bnorm_tup[1] == "?":
+            sys.stderr.write("Eliminating one PDB homolog because of error during normalization\n")
+            del all_seq_Bnorm[PDB_homolog]
+            break
+# Create input for MSA: templates
+
+for PDB_homolog in all_seq_Bnorm:
+    hits_for_MSA_file.write (">" + str(PDB_homolog) + "\n")
+    hits_for_MSA_file.write (all_seq_Bnorm[PDB_homolog]["FASTA_seq"] + "\n")
+
+sys.stderr.write("Using " + str(len(all_seq_Bnorm)) + " PDB homologs with normalized B-values\n")
 
 # Add query to MSA input
 
@@ -144,14 +156,13 @@ msa_records = msa_clustal.read_msa("PDB_MSA_clustalo.out.fasta")
 msa_records_with_indices = msa_clustal.assign_msa_record_indices(msa_records)
 
 ## Calculate flexibility per position
-## Calculate flexibility per position
 
 sys.stderr.write("Calculating flexibility...\n")
 
 incomplete_flexibility = calculate_flexibility.calculate_flex_pos(all_seq_Bnorm, msa_records_with_indices, PDB_scores_to_download)
 complete_flexibility = calculate_flexibility.complete_missing_scores(incomplete_flexibility)
 
-### Create perseable text output file
+## Create parseable text output
 
 try:
     output_text_graph.create_output_text(output_prefix, complete_flexibility)
@@ -162,7 +173,7 @@ except:
 else:
     sys.stderr.write("The text output file has been created successfully!\n")
 
-### Draw flexibility graph
+## Draw flexibility graph
 
 try:
     output_text_graph.draw_flex_line_col(output_prefix, complete_flexibility)
@@ -172,3 +183,4 @@ except:
 
 else:
     sys.stderr.write("The plot has been created successfully!\n")
+

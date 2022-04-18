@@ -2,6 +2,7 @@
 ############ GET SEQ and B-FACTORS FROM PDB ############
 ########################################################
 
+import sys
 from Bio.PDB import PDBParser
 from Bio.PDB.Polypeptide import three_to_one
 import statistics
@@ -25,8 +26,8 @@ def get_seq_B_from_PDB (PDB_file):
 
     parser = PDBParser()
     pdb_struct = parser.get_structure("struct_ID" ,PDB_file)
-    list_residues=[]
-    list_b_factor_raw=[]
+    # list_residues=[]
+    # list_b_factor_raw=[]
 
     # access atoms
     # get information
@@ -53,6 +54,7 @@ def get_seq_B_from_PDB (PDB_file):
     return(seq_Bval_dict)
 
 def normalized_b_values(dict_seq_bval):
+
     """ 
     Takes a dictionary with 2 keys as input:
     * "FASTA_seq": the sequence from the crystallized protein
@@ -85,12 +87,18 @@ def normalized_b_values(dict_seq_bval):
         list_b_val_before.append(residue_b_val[1])
         
     for b_val_not_norm in list_b_val_before:
-        b_val_norm = round((b_val_not_norm-statistics.mean(list_b_val_before))/statistics.stdev(list_b_val_before), 5)
-        # b val norm with 5 decimal positions
+        
+        try: # try to normalize
+            b_val_norm = round((b_val_not_norm-statistics.mean(list_b_val_before))/statistics.stdev(list_b_val_before), 5)
+
+        except: # zero division error
+            b_val_norm = "?"
+
+        # append b val norm with 5 decimal positions
         list_b_val_norm.append(b_val_norm)
         res_b_val_norm = list(zip(list_res, list_b_val_norm))
         
-        # join two list in a third one
+    # join two list in a third one
     dict_seq_bval["B_val_list"] = ""
     # delete previous value of the dictionary
     dict_seq_bval["B_val_list"] = res_b_val_norm
