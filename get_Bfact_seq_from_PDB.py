@@ -1,6 +1,7 @@
 ########################################################
 ############ GET SEQ and B-FACTORS FROM PDB ############
 ########################################################
+""" Extracts B-values from PDB hits """
 
 from Bio.PDB import PDBParser
 from Bio.PDB.Polypeptide import three_to_one
